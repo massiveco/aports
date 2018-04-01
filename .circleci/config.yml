@@ -8,3 +8,5 @@ jobs:
       - run:
           name: Build testing packages
           command: make testing
+      - store_artifacts:
+            path: /tmp/packages

@@ -1,4 +1,4 @@
-export REPODEST=/apk/packages
+export REPODEST=/tmp/packages
 
 cri-o:
 	cd testing/cri-o && \
