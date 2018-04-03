@@ -1,0 +1,39 @@
+# Maintainer: Dan Williams <dan@ma.ssive.co>
+pkgname=node_exporter
+pkgver=0.15.2
+pkgrel=0
+pkgdesc="Prometheus Exporter for machine metrics"
+url="https://github.com/prometheus/node_exporter"
+arch="all"
+license="Apache-2.0"
+makedepends="go bash"
+source="$pkgname-$pkgver.tar.gz::${url}/archive/v${pkgver}.tar.gz
+	disable-race-tests-on-alpine.patch"
+builddir="$srcdir/src/github.com/prometheus/node_exporter"
+
+
+export GOPATH="$srcdir"
+
+prepare() {
+	mkdir -p ${builddir%/*}
+	mv "$srcdir"/$pkgname-$pkgver "$builddir"/
+	default_prepare
+}
+
+build() {
+	cd "$builddir"
+	make build
+}
+
+check() {
+	cd "$builddir"
+	make test
+}
+
+package() {
+	cd "$builddir"
+	install -Dm755 node_exporter "$pkgdir"/usr/bin/node_exporter
+}
+
+sha512sums="b39ce0801a5bf5a2a70c4034659d047d70b3763af3f18925b65c2b5f72832e261362aaeb9ce4c68cb7bf52e790d3fc710a6c8550ad7876e89fd9f5a055200a52  node_exporter-0.15.2.tar.gz
+25dae9889ab56b7600116f07d206e9702a75e8f2d89bb8a42e12476f7fc6a12c12838a45ea4e7974cc6027efac04ffd94d1f511191f45cba3eedd1460ef67c0d  disable-race-tests-on-alpine.patch"
