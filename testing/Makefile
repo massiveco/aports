@@ -8,6 +8,10 @@ runc:
 	cd testing/runc && \
 		abuild -r
 
+etcd:
+	cd testing/etcd && \
+		abuild -r
+
 node_exporter:
 	cd testing/node_exporter && \
 		abuild -r
