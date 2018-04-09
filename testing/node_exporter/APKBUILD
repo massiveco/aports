@@ -8,9 +8,11 @@ arch="all"
 license="Apache-2.0"
 makedepends="go bash"
 source="$pkgname-$pkgver.tar.gz::${url}/archive/v${pkgver}.tar.gz
-	disable-race-tests-on-alpine.patch"
+	disable-race-tests-on-alpine.patch
+	node_exporter.initd
+	node_exporter.monitd
+	node_exporter.confd"
 builddir="$srcdir/src/github.com/prometheus/node_exporter"
-
 
 export GOPATH="$srcdir"
 
@@ -31,9 +33,14 @@ check() {
 }
 
 package() {
-	cd "$builddir"
-	install -Dm755 node_exporter "$pkgdir"/usr/bin/node_exporter
+	install -Dm755 "$builddir"/node_exporter "$pkgdir"/usr/bin/node_exporter
+	install -Dm600 "$srcdir"/node_exporter.confd "$pkgdir"/etc/conf.d/$pkgname
+	install -Dm600 "$srcdir"/node_exporter.initd "$pkgdir"/etc/init.d/$pkgname
+	install -Dm600 "$srcdir"/node_exporter.monitd "$pkgdir"/etc/monit.d/$pkgname.conf
 }
 
 sha512sums="b39ce0801a5bf5a2a70c4034659d047d70b3763af3f18925b65c2b5f72832e261362aaeb9ce4c68cb7bf52e790d3fc710a6c8550ad7876e89fd9f5a055200a52  node_exporter-0.15.2.tar.gz
-25dae9889ab56b7600116f07d206e9702a75e8f2d89bb8a42e12476f7fc6a12c12838a45ea4e7974cc6027efac04ffd94d1f511191f45cba3eedd1460ef67c0d  disable-race-tests-on-alpine.patch"
+25dae9889ab56b7600116f07d206e9702a75e8f2d89bb8a42e12476f7fc6a12c12838a45ea4e7974cc6027efac04ffd94d1f511191f45cba3eedd1460ef67c0d  disable-race-tests-on-alpine.patch
+03ffa0f5da65d54d4798ace63503daac38aeb0e52279f3860ed26ea16ac61e50c8d2509e2f94e02bf62b317f1ba0842354d66ff1d96a189ce93e61ad9efe8faa  node_exporter.initd
+0bf91cd524632ab1a96e85a806597755c8fc94f78cbe02caf9888c6e8a4295d1ea603078a8e69a544167b46c340924e7c4994b631bb22e3d50cdef1c12d4bc6b  node_exporter.monitd
+64b8461b93b0a5377fa7e6ee27d87c08c2ddec1c70fd87a06633e1e1234b8dddea19e3db9b39e0179aa554f093bb9fdd3db31b45dc5377382b333d40d48876cc  node_exporter.confd"

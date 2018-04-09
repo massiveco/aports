@@ -1,0 +1,12 @@
+#!/bin/sh
+
+USER=node_exporter
+GROUP=prometheus
+
+addgroup -S $GROUP 2>/dev/null
+adduser -S -D -H -s /sbin/nologin -G $GROUP -g $USER $USER 2>/dev/null
+
+mkdir -p /var/lib/node_exporter/textfile_collector
+chown $USER:$GROUP /var/lib/node_exporter/textfile_collector
+
+exit 0

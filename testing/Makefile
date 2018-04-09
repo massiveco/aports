@@ -12,4 +12,4 @@ node_exporter:
 	cd testing/node_exporter && \
 		abuild -r
 
-testing: node_exporter
+testing: node_exporter etcd
