@@ -10,3 +10,9 @@ jobs:
           command: make testing
       - store_artifacts:
             path: /tmp/packages
+
+deployment:
+  prod:
+    branch: master
+    commands:
+      - aws s3 sync /tmp/packages s3://alpine.ma.ssive.co --delete
