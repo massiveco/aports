@@ -15,6 +15,7 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp
+      - run: sudo apt update
       - run: sudo apt install awscli
       - run: aws s3 sync /tmp/packages s3://alpine.ma.ssive.co --delete
 
