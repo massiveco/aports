@@ -6,7 +6,7 @@ pkgdesc="Production-Grade Container Scheduling and Management"
 url="https://github.com/kubernetes/kubernetes"
 arch="all"
 license="Apache-2.0"
-makedepends="go bash grep"
+makedepends="go bash grep findutils rsync linux-headers"
 source="$pkgname-$pkgver.tar.gz::${url}/archive/v${pkgver}.tar.gz"
 builddir="$srcdir/src/github.com/kubernetes/kubernetes"
 
@@ -20,7 +20,7 @@ prepare() {
 
 build() {
 	cd "$builddir"
-	make all
+	make -j1 WHAT="cmd/kubelet cmd/kube-proxy cmd/kube-apiserver cmd/kube-controller-manager cmd/kube-scheduler cmd/kubectl"
 }
 
 # check() {
