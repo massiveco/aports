@@ -5,9 +5,7 @@ jobs:
       - image: massiveco/docker-alpine-sdk
     steps:
       - checkout
-      - run:
-        name: Build testing packages
-        command: make testing
+      - run: make testing
       - persist_to_workspace:
           root: /tmp
           paths:
@@ -16,9 +14,9 @@ jobs:
     machine: true
     steps:
       - attach_workspace:
-        at: /tmp
-      - apt add awscli
-      - aws s3 sync /tmp/packages s3://alpine.ma.ssive.co --delete
+          at: /tmp
+      - run: apt add awscli
+      - run: aws s3 sync /tmp/packages s3://alpine.ma.ssive.co --delete
 
 workflows:
   version: 2

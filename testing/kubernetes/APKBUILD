@@ -1,0 +1,35 @@
+# Maintainer: Dan Williams <dan@ma.ssive.co>
+pkgname=kubernetes
+pkgver=1.10.0
+pkgrel=0
+pkgdesc="Production-Grade Container Scheduling and Management"
+url="https://github.com/kubernetes/kubernetes"
+arch="all"
+license="Apache-2.0"
+makedepends="go bash grep"
+source="$pkgname-$pkgver.tar.gz::${url}/archive/v${pkgver}.tar.gz"
+builddir="$srcdir/src/github.com/kubernetes/kubernetes"
+
+export GOPATH="$srcdir"
+
+prepare() {
+	mkdir -p ${builddir%/*}
+	mv "$srcdir"/$pkgname-$pkgver "$builddir"/
+	default_prepare
+}
+
+build() {
+	cd "$builddir"
+	make all
+}
+
+# check() {
+# 	cd "$builddir"
+# 	make test
+# }
+
+package() {
+	install -Dm755 "$builddir"/bin/kubernetestool "$pkgdir"/usr/bin/kubernetestool
+}
+
+sha512sums="64910fd911641d8f1188fa061c8e5d4634f228c66dc158011cd0cf50c0db1945c0c0d609c588704d2c33ca33da681b78fc17cc8c29cc148a61281926d14364d9  kubernetes-1.10.0.tar.gz"

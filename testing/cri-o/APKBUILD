@@ -6,20 +6,23 @@ pkgdesc="CLI tool for spawning and running containers according to the OCI speci
 url="https://github.com/kubernetes-incubator/cri-o"
 arch="all"
 license="Apache-2.0"
+depends="conntrack-tools"
 makedepends="go libc6-compat glib-dev gpgme-dev linux-headers btrfs-progs-dev lvm2-dev libseccomp-dev"
 source="cri-o.tar.gz::$url/archive/v${pkgver/_beta1/-beta.1}.tar.gz"
+builddir="$srcdir/src/github.com/kubernetes-incubator/cri-o"
 
-builddir="$srcdir/$pkgname-${pkgver/_beta1/-beta.1}"
+export GOPATH="$srcdir"
 
 prepare() {
-	mkdir -p "$builddir"/bin "$builddir"/src/github.com/kubernetes-incubator/
-	ln -s "$builddir" "$builddir"/src/github.com/kubernetes-incubator/cri-o
+	mkdir -p ${builddir%/*}
+	mv "$srcdir"/$pkgname-${pkgver/_beta1/-beta.1} "$builddir"/
+	default_prepare
 }
 
 build() {
-	cd "$builddir"/src/github.com/kubernetes-incubator/cri-o
-	GOPATH="$PWD" make binaries
-	GOPATH="$PWD" make crio.conf
+	cd "$builddir"
+	make binaries
+	make crio.conf
 }
 
 package() {

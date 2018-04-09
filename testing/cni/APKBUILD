@@ -1,0 +1,37 @@
+# Maintainer: Dan Williams <dan@ma.ssive.co>
+pkgname=cni
+pkgver=0.6.0
+pkgrel=0
+pkgdesc="Container Network Interface - networking for Linux containers"
+url="https://github.com/containernetworking/cni"
+arch="all"
+license="Apache-2.0"
+makedepends="go bash"
+source="$pkgname-$pkgver.tar.gz::${url}/archive/v${pkgver}.tar.gz
+cni-disable-coverag.patch"
+builddir="$srcdir/src/github.com/containernetworking/cni"
+
+export GOPATH="$srcdir"
+
+prepare() {
+	mkdir -p ${builddir%/*}
+	mv "$srcdir"/$pkgname-$pkgver "$builddir"/
+	default_prepare
+}
+
+build() {
+	cd "$builddir"
+	./build.sh
+}
+
+check() {
+	cd "$builddir"
+	./test.sh
+}
+
+package() {
+	install -Dm755 "$builddir"/bin/cnitool "$pkgdir"/usr/bin/cnitool
+}
+
+sha512sums="3b5b35ed546f82a939b3090ac49d2f7ab0542a079d0f45b0dd9b45cf4849abb6c10fbcb810b7567a7a15d6b8144f5b3962bfca319a37342c5bc39f5fa58f0777  cni-0.6.0.tar.gz
+85dfffcc4e21889087a1fc14d7cac734cf41240110ed2936f24763bbd3286f0fb5ad1bcb0a09beef1084c0dbba9acf1678cd1d005ce041758bbe4c8ed24fa318  cni-disable-coverag.patch"
