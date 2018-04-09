@@ -6,13 +6,30 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Build testing packages
-          command: make testing
-      - store_artifacts:
-            path: /tmp/packages
-
-deployment:
-  prod:
-    branch: master
-    commands:
+        name: Build testing packages
+        command: make testing
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
+	        # taken to be the root directory of the workspace.
+          root: /tmp
+          # Must be relative path from root
+          paths:
+            - packages
+  deploy:
+    - attach_workspace:
+      at: /tmp
+    scripts:
+      - apt add awscli
       - aws s3 sync /tmp/packages s3://alpine.ma.ssive.co --delete
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
