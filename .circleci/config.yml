@@ -15,7 +15,7 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp
-      - run: apt install awscli
+      - run: sudo apt install awscli
       - run: aws s3 sync /tmp/packages s3://alpine.ma.ssive.co --delete
 
 workflows:
