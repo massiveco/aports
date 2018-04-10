@@ -29,7 +29,12 @@ build() {
 # }
 
 package() {
-	install -Dm755 "$builddir"/bin/kubernetestool "$pkgdir"/usr/bin/kubernetestool
+	local binpath="$builddir/_output/local/bin/linux/amd64"
+
+	install -Dm755 "$binpath"/kubectl "$pkgdir"/usr/bin/kubectl
+	install -Dm755 "$binpath"/kubelet "$pkgdir"/usr/bin/kubelet
+	install -Dm755 "$binpath"/kube-apiserver "$pkgdir"/usr/bin/kube-apiserverkube-controller-manager
+	install -Dm755 "$binpath"/kube-controller-manager "$pkgdir"/usr/bin/kube-controller-manager
 }
 
 sha512sums="64910fd911641d8f1188fa061c8e5d4634f228c66dc158011cd0cf50c0db1945c0c0d609c588704d2c33ca33da681b78fc17cc8c29cc148a61281926d14364d9  kubernetes-1.10.0.tar.gz"
