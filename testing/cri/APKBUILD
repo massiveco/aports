@@ -1,0 +1,38 @@
+# Maintainer: Dan Williams <dan@ma.ssive.co>
+pkgname=cri
+pkgver=1.0.0_rc1
+pkgrel=0
+pkgdesc="Containerd Plugin for Kubernetes Container Runtime Interface"
+url="https://github.com/containerd/cri"
+arch="all"
+license="Apache-2.0"
+makedepends="go bash libseccomp-dev libapparmor-dev btrfs-progs-dev"
+source="$pkgname-$pkgver.tar.gz::${url}/archive/v${pkgver/_rc1/-rc.1}.tar.gz
+	disable-race-testing-on-alpine.patch"
+builddir="$srcdir/src/github.com/containerd/cri"
+
+export GOPATH="$srcdir"
+
+prepare() {
+	mkdir -p ${builddir%/*}
+	mv "$srcdir"/$pkgname-${pkgver/_rc1/-rc.1} "$builddir"/
+	default_prepare
+}
+
+build() {
+	cd "$builddir"
+	make binaries
+}
+
+check() {
+	cd "$builddir"
+	make test
+}
+
+package() {
+	install -Dm755 "$builddir"/_output/containerd "$pkgdir"/usr/bin/containerd
+	install -Dm755 "$builddir"/_output/ctr "$pkgdir"/usr/bin/ctr
+}
+
+sha512sums="4727e17a31371e488a96ed442ec4ac0b72d252dfb5fed4c5f41e4469cadfe926b96de9529704cb2beb06cf43534ea3f36190bc482303d11f781573ef70a7b197  cri-1.0.0_rc1.tar.gz
+6f92d7b9e200afeba49ddc5f59e5acec531870e65b3e71bfe19fcc3964c9ec017eef6414956993e1814b428d62680f7f3a88b3acc730067d7e214c44c154cc1b  disable-race-testing-on-alpine.patch"

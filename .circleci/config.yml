@@ -10,23 +10,23 @@ jobs:
           root: /tmp
           paths:
             - packages
-  deploy:
-    machine: true
-    steps:
-      - attach_workspace:
-          at: /tmp
-      - run: sudo apt update
-      - run: sudo apt install awscli
-      - run: aws s3 sync /tmp/packages s3://alpine.ma.ssive.co --delete
+#   deploy:
+#     machine: true
+#     steps:
+#       - attach_workspace:
+#           at: /tmp
+#       - run: sudo apt update
+#       - run: sudo apt install awscli
+#       - run: aws s3 sync /tmp/packages s3://alpine.ma.ssive.co --delete
 
-workflows:
-  version: 2
-  build-deploy:
-    jobs:
-      - build
-      - deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only: master
+# workflows:
+#   version: 2
+#   build-deploy:
+#     jobs:
+#       - build
+#       - deploy:
+#           requires:
+#             - build
+#           filters:
+#             branches:
+#               only: master

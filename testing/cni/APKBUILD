@@ -24,13 +24,14 @@ build() {
 	./build.sh
 }
 
-check() {
-	cd "$builddir"
-	./test.sh
-}
+# check() {
+# 	cd "$builddir"
+# 	./test.sh
+# }
 
 package() {
 	install -Dm755 "$builddir"/bin/cnitool "$pkgdir"/usr/bin/cnitool
+	install -Dm755 "$builddir"/bin/noop "$pkgdir"/usr/bin/noop
 }
 
 sha512sums="3b5b35ed546f82a939b3090ac49d2f7ab0542a079d0f45b0dd9b45cf4849abb6c10fbcb810b7567a7a15d6b8144f5b3962bfca319a37342c5bc39f5fa58f0777  cni-0.6.0.tar.gz

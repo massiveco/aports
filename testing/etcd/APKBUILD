@@ -6,7 +6,7 @@ pkgdesc="Distributed reliable key-value store for the most critical data of a di
 url="https://github.com/coreos/etcd"
 arch="all"
 license="Apache-2.0"
-makedepends="go bash"
+makedepends="go go-tools bash"
 source="$pkgname-$pkgver.tar.gz::${url}/archive/v${pkgver}.tar.gz
 	disable-race-tests-on-alpine.patch
 	etcd.initd
@@ -26,11 +26,6 @@ build() {
 	cd "$builddir"
 	./build
 }
-
-# check() {
-# 	cd "$builddir"
-# 	./test
-# }
 
 package() {
 	install -Dm755 "$builddir"/bin/etcd "$pkgdir"/usr/bin/etcd

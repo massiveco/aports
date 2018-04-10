@@ -23,6 +23,11 @@ build() {
 	make
 }
 
+# check() {
+# 	cd "$builddir"
+# 	make localtest
+# }
+
 package() {
 	cd $builddir
 	install -Dm755 runc "$pkgdir"/usr/bin/runc
