@@ -5,6 +5,7 @@ all: enable-edge-community
 
 enable-edge-community:
 	sudo su -c 'echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories'
+	sudo su -c 'echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories'
 	sudo apk update
 	sudo apk add go
 	CGO_ENABLED=0 sudo -E go install -a -installsuffix cgo std
