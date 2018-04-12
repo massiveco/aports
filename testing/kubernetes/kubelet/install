@@ -6,5 +6,7 @@ GROUP=kubernetes
 addgroup -S $GROUP 2>/dev/null
 adduser -S -D -H -s /sbin/nologin -G $GROUP -g $USER $USER 2>/dev/null
 
+mkdir -p /var/lib/kubelet
+mkdir -p /var/lib/kubernetes
 
 exit 0
