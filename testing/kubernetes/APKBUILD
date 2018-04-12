@@ -27,9 +27,14 @@ build() {
 kubelet() {
 	local binpath="$builddir/_output/local/bin/linux/amd64"
 
-	install = "kubelet/install"
-
 	install -Dm755 "$binpath"/kubelet "$subpkgdir"/usr/bin/kubelet
+
+	install -Dm600 "$srcdir"/kubelet/kubelet.initd "$subpkgdir"/etc/init.d/kubelet
+	install -Dm600 "$srcdir"/kubelet/kubelet.confd "$subpkgdir"/etc/conf.d/kubelet
+	install -Dm600 "$srcdir"/kubelet/kubelet.monitd "$subpkgdir"/etc/monit.d/kubelet.conf
+
+	mkdir -p "$subpkgdir"/var/lib/kubelet
+
 }
 
 # check() {
