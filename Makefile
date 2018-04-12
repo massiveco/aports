@@ -1,14 +1,7 @@
 
-all: enable-edge-community
+all:
 	cd stable && $(MAKE) all
 	cd testing && $(MAKE) all
-
-enable-edge-community:
-	sudo su -c 'echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories'
-	sudo su -c 'echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories'
-	sudo apk update
-	sudo apk add go
-	CGO_ENABLED=0 sudo -E go install -a -installsuffix cgo std
 
 local:
 	docker run --rm -it -v $(shell pwd):/apk -v $(shell pwd)/packages:/tmp/packages --entrypoint=sh -u alpine massiveco/docker-alpine-sdk -c 'cd /apk && make all'
