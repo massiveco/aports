@@ -39,14 +39,9 @@ kubelet() {
 # 	make test
 # }
 
-# package() {
-# 	local binpath="$builddir/_output/local/bin/linux/amd64"
-
-# 	install -Dm755 "$binpath"/kubelet "$pkgdir"/usr/bin/kubelet
-# 	install -Dm755 "$binpath"/kube-apiserver "$pkgdir"/usr/bin/kube-apiserverkube-controller-manager
-# 	install -Dm755 "$binpath"/kube-scheduler "$pkgdir"/usr/bin/kube-schedulerkube-controller-manager
-# 	install -Dm755 "$binpath"/kube-controller-manager "$pkgdir"/usr/bin/kube-controller-manager
-# }
+package() {
+	mkdir -p "$pkgdir"
+}
 
 # controller() {
 # 	local binpath="$builddir/_output/local/bin/linux/amd64"
