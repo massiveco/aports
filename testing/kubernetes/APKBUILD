@@ -9,13 +9,13 @@ license="Apache-2.0"
 makedepends="go bash grep findutils rsync linux-headers"
 source="$pkgname-$pkgver.tar.gz::${url}/archive/v${pkgver}.tar.gz"
 builddir="$srcdir/src/github.com/kubernetes/kubernetes"
-subpackages="$pkgname-controller $pkgname-worker"
+subpackages="$pkgname-kubelet"
 
 export GOPATH="$srcdir"
 
 prepare() {
 	mkdir -p ${builddir%/*}
-	mv "$srcdir"/$pkgname-$pkgver "$builddir"/
+	mv "$srcdir"/kubernetes-$pkgver "$builddir"/
 	default_prepare
 }
 
@@ -24,40 +24,46 @@ build() {
 	make -j1 WHAT="cmd/kubelet cmd/kube-proxy cmd/kube-apiserver cmd/kube-controller-manager cmd/kube-scheduler cmd/kubectl"
 }
 
+kubelet() {
+	local binpath="$builddir/_output/local/bin/linux/amd64"
+
+	install = "kubelet/install"
+
+	install -Dm755 "$binpath"/kubelet "$subpkgdir"/usr/bin/kubelet
+}
+
 # check() {
 # 	cd "$builddir"
 # 	make test
 # }
 
-package() {
-	local binpath="$builddir/_output/local/bin/linux/amd64"
+# package() {
+# 	local binpath="$builddir/_output/local/bin/linux/amd64"
 
-	install -Dm755 "$binpath"/kubectl "$pkgdir"/usr/bin/kubectl
-	install -Dm755 "$binpath"/kubelet "$pkgdir"/usr/bin/kubelet
-	install -Dm755 "$binpath"/kube-proxy "$pkgdir"/usr/bin/kube-proxy
-	install -Dm755 "$binpath"/kube-apiserver "$pkgdir"/usr/bin/kube-apiserverkube-controller-manager
-	install -Dm755 "$binpath"/kube-scheduler "$pkgdir"/usr/bin/kube-schedulerkube-controller-manager
-	install -Dm755 "$binpath"/kube-controller-manager "$pkgdir"/usr/bin/kube-controller-manager
-}
+# 	install -Dm755 "$binpath"/kubelet "$pkgdir"/usr/bin/kubelet
+# 	install -Dm755 "$binpath"/kube-apiserver "$pkgdir"/usr/bin/kube-apiserverkube-controller-manager
+# 	install -Dm755 "$binpath"/kube-scheduler "$pkgdir"/usr/bin/kube-schedulerkube-controller-manager
+# 	install -Dm755 "$binpath"/kube-controller-manager "$pkgdir"/usr/bin/kube-controller-manager
+# }
 
-controller() {
-	local binpath="$builddir/_output/local/bin/linux/amd64"
+# controller() {
+# 	local binpath="$builddir/_output/local/bin/linux/amd64"
 
-	depends="kubernetes-worker"
+# 	depends="kubernetes-worker"
 
-	install -Dm755 "$binpath"/kube-apiserver "$subpkgdir"/usr/bin/kube-apiserver
-	install -Dm755 "$binpath"/kube-scheduler "$subpkgdir"/usr/bin/kube-scheduler
-	install -Dm755 "$binpath"/kube-controller-manager "$subpkgdir"/usr/bin/kube-controller-manager
-}
+# 	install -Dm755 "$binpath"/kube-apiserver "$subpkgdir"/usr/bin/kube-apiserver
+# 	install -Dm755 "$binpath"/kube-scheduler "$subpkgdir"/usr/bin/kube-scheduler
+# 	install -Dm755 "$binpath"/kube-controller-manager "$subpkgdir"/usr/bin/kube-controller-manager
+# }
 
-worker() {
-	local binpath="$builddir/_output/local/bin/linux/amd64"
+# worker() {
+# 	local binpath="$builddir/_output/local/bin/linux/amd64"
 
-	depends="conntrack-tools"
+# 	depends="conntrack-tools socat"
 
-	install -Dm755 "$binpath"/kubectl "$subpkgdir"/usr/bin/kubectl
-	install -Dm755 "$binpath"/kubelet "$subpkgdir"/usr/bin/kubelet
-	install -Dm755 "$binpath"/kube-proxy "$subpkgdir"/usr/bin/kube-proxy
-}
+# 	install -Dm755 "$binpath"/kubectl "$subpkgdir"/usr/bin/kubectl
+# 	install -Dm755 "$binpath"/kubelet "$subpkgdir"/usr/bin/kubelet
+# 	install -Dm755 "$binpath"/kube-proxy "$subpkgdir"/usr/bin/kube-proxy
+# }
 
 sha512sums="64910fd911641d8f1188fa061c8e5d4634f228c66dc158011cd0cf50c0db1945c0c0d609c588704d2c33ca33da681b78fc17cc8c29cc148a61281926d14364d9  kubernetes-1.10.0.tar.gz"
