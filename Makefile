@@ -1,10 +1,7 @@
 
-all: enable-edge-community clean
-	# cd stable && $(MAKE)
+all: enable-edge-community
+	cd stable && $(MAKE)
 	cd testing && $(MAKE)
-
-clean:
-	rm -fR packages/*
 
 enable-edge-community:
 	sudo su -c 'echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories'
