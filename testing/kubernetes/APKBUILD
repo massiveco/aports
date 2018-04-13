@@ -31,6 +31,7 @@ build() {
 
 kubelet() {
 	local binpath="$builddir/_output/local/bin/linux/amd64"
+	local configpath="$srcdir/../kubelet"
 
 	depends="socat"
 	install="$srcdir/kubelet/install"
@@ -39,10 +40,10 @@ kubelet() {
 	install -Dm755 "$binpath"/kubelet "$subpkgdir"/usr/bin/kubelet
 
 	# Config
-	install -Dm600 "$srcdir"/../kubelet/kubelet.initd "$subpkgdir"/etc/init.d/kubelet
-	install -Dm600 "$srcdir"/../kubelet/kubelet.confd "$subpkgdir"/etc/conf.d/kubelet
-	install -Dm600 "$srcdir"/../kubelet/kubelet.monitd "$subpkgdir"/etc/monit.d/kubelet.conf
-	install -Dm600 "$srcdir"/../kubelet/99-loopback.conf /etc/cni/net.d/99-loopback.conf
+	install -Dm600 "$configpath"/kubelet.initd "$subpkgdir"/etc/init.d/kubelet
+	install -Dm600 "$configpath"/kubelet.confd "$subpkgdir"/etc/conf.d/kubelet
+	install -Dm600 "$configpath"/kubelet.monitd "$subpkgdir"/etc/monit.d/kubelet.conf
+	install -Dm600 "$configpath"/99-loopback.conf "$subpkgdir"/etc/cni/net.d/99-loopback.conf
 }
 
 
