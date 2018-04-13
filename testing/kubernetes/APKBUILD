@@ -9,7 +9,7 @@ license="Apache-2.0"
 makedepends="go bash grep findutils rsync linux-headers"
 source="$pkgname-$pkgver.tar.gz::${url}/archive/v${pkgver}.tar.gz"
 builddir="$srcdir/src/github.com/kubernetes/kubernetes"
-subpackages="$pkgname-kubelet $pkgname-kubectl $pkgname-kube-proxy"
+subpackages="$pkgname-kubelet $pkgname-kubectl $pkgname-kubeproxy"
 
 export GOPATH="$srcdir"
 
@@ -46,9 +46,11 @@ kubelet() {
 }
 
 
-kube-proxy() {
+kubeproxy() {
 	local binpath="$builddir/_output/local/bin/linux/amd64"
 	local configpath="$srcdir/../kube-proxy"
+
+	pkgname="kubernetes-kube-proxy"
 
 	install="$srcdir/kube-proxy/install"
 
