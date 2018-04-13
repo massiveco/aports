@@ -27,10 +27,15 @@ build() {
 	./build
 }
 
+# check() {
+# 	cd "$builddir"
+# 	./test
+# }
+
 package() {
 	install -Dm755 "$builddir"/bin/etcd "$pkgdir"/usr/bin/etcd
 	install -Dm755 "$builddir"/bin/etcdctl "$pkgdir"/usr/bin/etcdctl
-	
+
 	install -Dm600 "$srcdir"/etcd.confd "$pkgdir"/etc/conf.d/$pkgname
 	install -Dm600 "$srcdir"/etcd.initd "$pkgdir"/etc/init.d/$pkgname
 	install -Dm600 "$srcdir"/etcd.monitd "$pkgdir"/etc/monit.d/$pkgname.conf
