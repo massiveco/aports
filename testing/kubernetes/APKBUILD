@@ -9,7 +9,7 @@ license="Apache-2.0"
 makedepends="go bash grep findutils rsync linux-headers"
 source="$pkgname-$pkgver.tar.gz::${url}/archive/v${pkgver}.tar.gz"
 builddir="$srcdir/src/github.com/kubernetes/kubernetes"
-subpackages="$pkgname-kubelet"
+subpackages="$pkgname-kubelet $pkgname-kubectl $pkgname-kube-proxy"
 
 export GOPATH="$srcdir"
 
@@ -24,44 +24,51 @@ build() {
 	make -j1 WHAT="cmd/kubelet cmd/kube-proxy cmd/kube-apiserver cmd/kube-controller-manager cmd/kube-scheduler cmd/kubectl"
 }
 
-kubelet() {
-	local binpath="$builddir/_output/local/bin/linux/amd64"
-	install="$srcdir/kubelet/install"
-
-	install -Dm755 "$binpath"/kubelet "$subpkgdir"/usr/bin/kubelet
-
-	install -Dm600 "$srcdir"/../kubelet/kubelet.initd "$subpkgdir"/etc/init.d/kubelet
-	install -Dm600 "$srcdir"/../kubelet/kubelet.confd "$subpkgdir"/etc/conf.d/kubelet
-	install -Dm600 "$srcdir"/../kubelet/kubelet.monitd "$subpkgdir"/etc/monit.d/kubelet.conf
-}
-
 # check() {
 # 	cd "$builddir"
 # 	make test
 # }
 
+kubelet() {
+	local binpath="$builddir/_output/local/bin/linux/amd64"
+
+	depends="socat"
+	install="$srcdir/kubelet/install"
+
+	# Binaries
+	install -Dm755 "$binpath"/kubelet "$subpkgdir"/usr/bin/kubelet
+
+	# Config
+	install -Dm600 "$srcdir"/../kubelet/kubelet.initd "$subpkgdir"/etc/init.d/kubelet
+	install -Dm600 "$srcdir"/../kubelet/kubelet.confd "$subpkgdir"/etc/conf.d/kubelet
+	install -Dm600 "$srcdir"/../kubelet/kubelet.monitd "$subpkgdir"/etc/monit.d/kubelet.conf
+	install -Dm600 "$srcdir"/../kubelet/99-loopback.conf /etc/cni/net.d/99-loopback.conf
+}
+
+
+kube-proxy() {
+	local binpath="$builddir/_output/local/bin/linux/amd64"
+	local configpath="$srcdir/../kube-proxy"
+
+	install="$srcdir/kube-proxy/install"
+
+	# Binaries
+	install -Dm755 "$binpath"/kube-proxy "$subpkgdir"/usr/bin/kube-proxy
+
+	# Config
+	install -Dm600 "$configpath"/kube-proxy.initd "$subpkgdir"/etc/init.d/kube-proxy
+	install -Dm600 "$configpath"/kube-proxy.confd "$subpkgdir"/etc/conf.d/kube-proxy
+	install -Dm600 "$configpath"/kube-proxy.monitd "$subpkgdir"/etc/monit.d/kube-proxy.conf
+}
+
+kubectl() {
+	local binpath="$builddir/_output/local/bin/linux/amd64"
+
+	install -Dm755 "$binpath"/kubectl "$subpkgdir"/usr/bin/kubectl
+}
+
 package() {
 	mkdir -p "$pkgdir"
 }
-
-# controller() {
-# 	local binpath="$builddir/_output/local/bin/linux/amd64"
-
-# 	depends="kubernetes-worker"
-
-# 	install -Dm755 "$binpath"/kube-apiserver "$subpkgdir"/usr/bin/kube-apiserver
-# 	install -Dm755 "$binpath"/kube-scheduler "$subpkgdir"/usr/bin/kube-scheduler
-# 	install -Dm755 "$binpath"/kube-controller-manager "$subpkgdir"/usr/bin/kube-controller-manager
-# }
-
-# worker() {
-# 	local binpath="$builddir/_output/local/bin/linux/amd64"
-
-# 	depends="conntrack-tools socat"
-
-# 	install -Dm755 "$binpath"/kubectl "$subpkgdir"/usr/bin/kubectl
-# 	install -Dm755 "$binpath"/kubelet "$subpkgdir"/usr/bin/kubelet
-# 	install -Dm755 "$binpath"/kube-proxy "$subpkgdir"/usr/bin/kube-proxy
-# }
 
 sha512sums="64910fd911641d8f1188fa061c8e5d4634f228c66dc158011cd0cf50c0db1945c0c0d609c588704d2c33ca33da681b78fc17cc8c29cc148a61281926d14364d9  kubernetes-1.10.0.tar.gz"
