@@ -3,6 +3,16 @@
 NAME=kubelet
 DAEMON=/usr/bin/$NAME
 
+OPTS="
+  --cloud-provider= \
+  --container-runtime=${CONTAINER_RUNTIME} \
+  --container-runtime-endpoint=${CONTAINER_RUNTIME_ENDPOINT} \
+  --image-pull-progress-deadline=${IMAGE_PULL_PROGRESS_DEADLINE} \
+  --kubeconfig=${KUBECONFIG} \
+  --network-plugin=${NETWORK_PLUGIN} \
+  --register-node=${REGISTER_NODE} \
+  --v=${LOG_LEVEL}"
+
 depend() {
         need net
         after firewall

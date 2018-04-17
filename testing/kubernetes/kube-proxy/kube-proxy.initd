@@ -2,6 +2,11 @@
 
 NAME=kube-proxy
 DAEMON=/usr/bin/$NAME
+OPTS="
+        --cluster-cidr=${CLUSTER_CIDR} \
+        --kubeconfig=${KUBECONFIG} \
+        --proxy-mode=${PROXY_MODE} \
+        --v=${LOG_LEVEL}"
 
 depend() {
         need net

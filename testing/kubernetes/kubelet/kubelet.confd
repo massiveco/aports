@@ -1,10 +1,5 @@
-ALLOW_PRIVILEGED=true
-ANONYMOUS_AUTH=false
-AUTHORIZATION_MODE=Webhook
-CLIENT_CA_FILE=/var/lib/kubernetes/ca.pem
+
 CLOUD_PROVIDER=
-CLUSTER_DNS=10.32.0.10
-CLUSTER_DOMAIN=cluster.local
 CONTAINER_RUNTIME=remote
 CONTAINER_RUNTIME_ENDPOINT=unix:///var/run/cri_containerd.sock
 IMAGE_PULL_PROGRESS_DEADLINE=2m
@@ -12,13 +7,4 @@ KUBECONFIG=/var/lib/kubelet/kubeconfig
 NETWORK_PLUGIN=cni
 POD_CIDR=${POD_CIDR}
 REGISTER_NODE=true
-
-OPTS="
-  --cloud-provider= \
-  --container-runtime=remote \
-  --container-runtime-endpoint=unix:///var/run/cri-containerd.sock \
-  --image-pull-progress-deadline=2m \
-  --kubeconfig=/var/lib/kubelet/kubeconfig \
-  --network-plugin=cni \
-  --register-node=${REGISTER_NODE} \
-  --v=2"
+LOG_LEVEL=2
